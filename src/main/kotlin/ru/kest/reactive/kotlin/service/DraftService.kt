@@ -7,13 +7,12 @@ import org.springframework.web.server.ResponseStatusException
 import ru.kest.reactive.kotlin.repository.DraftRepository
 import java.time.Instant
 
-private val logger = KotlinLogging.logger {}
+private val log = KotlinLogging.logger {}
 
 @Service
 class DraftService(val draftRepository: DraftRepository) {
 
     suspend fun updateDraft(orderId: Long) : String {
-        logger.info { "updateDraft($orderId)" }
         val draft = draftRepository.findById(orderId)
             ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Draft not found")
 
@@ -21,9 +20,26 @@ class DraftService(val draftRepository: DraftRepository) {
         draftRepository.save(draft)
         draftRepository.updateTimestamp(orderId)
 
-        logger.info { "draft $orderId successfully updated" }
-
         return orderId.toString()
     }
 
 }
+
+
+
+
+/*    suspend fun updateDraft(orderId: Long) : String {
+        log.info { "updateDraft($orderId)" }
+        val draft = draftRepository.findById(orderId)
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "Draft not found")
+        log.info { "## updateDraft 1" }
+        draft.updated = Instant.now()
+        draftRepository.save(draft)
+        log.info { "## updateDraft 2" }
+        draftRepository.updateTimestamp(orderId)
+
+        log.info { "draft $orderId successfully updated" }
+
+        return orderId.toString()
+    }
+*/

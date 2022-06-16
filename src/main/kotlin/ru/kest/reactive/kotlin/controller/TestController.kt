@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController
 import ru.kest.reactive.kotlin.service.DraftService
 import ru.kest.reactive.kotlin.service.RandomOrderIdService
 
-private val logger = KotlinLogging.logger {}
+private val log = KotlinLogging.logger {}
 
 @RestController
 @RequestMapping("/test")
@@ -16,7 +16,7 @@ class TestController(val draftService: DraftService,
 
     @GetMapping("/update")
     suspend fun update(): String {
-        logger.info { "Start update request" }
+        log.info { "Start update request" }
         return draftService.updateDraft(randomOrderIdService.randomOrderId)
     }
 
